@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="text.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="text-container">
+        <div id="text">....</div>
+    </div>
+
+</body>
+
+<script>
+    let words = ["memek", "kontol", "babi", "anjing", "FUCK", "BITCH", "KILLER KEEMSTAR"];
+    let text = document.getElementById("text");
+
+    //Minimum wait time for next character to be added
+    let minAddTime = 20;
+
+    //Minimum wait time for previous character to be deleted
+    let minDeleteTime = 25;
+    let maxDeleteTime = 70;
+
+    //Maximum wait time for next character to be added
+    let maxAddTime = 150;
+
+    //Recursively add new words:
+    let recursive_add = (i, new_word) => {
+        //i (int) = index of word in words[]
+        //new_word (string) = the new word being constructed
+        console.log(i);
+
+        let word = words[i];
+        let timeout = Math.floor(Math.random() * maxAddTime) + minAddTime;
+
+        if (word == new_word) {
+            timeout = 500;
+        } else {
+            new_word = new_word + word.charAt(new_word.length);
+        }
+
+        console.log(timeout, new_word)
+
+        setTimeout(() => {
+            if (word !== new_word){
+                text.innerHTML = new_word;
+                recursive_add(i, new_word);
+            } else {
+                text.innerHTML = new_word;
+                recursive_delete(i, new_word);
+                console.log("deelete", word, new_word);
+            }
+        }, timeout)
+
+    }
+
+    let recursive_delete = (i, new_word) => {
+
+        let word = words[i];
+        let timeout = Math.floor(Math.random() * maxDeleteTime) + minDeleteTime;
+        let new_index = Math.floor(Math.random() * words.length);
+        
+        while (i == new_index){
+            new_index = Math.floor(Math.random() * words.length);
+        }
+
+        if (word !== "") new_word = new_word = new_word.slice(0, new_word.length-1);
+
+        setTimeout(() => {
+            if (new_word == ""){
+                text.innerHTML = "";
+                recursive_add(new_index, "");
+                console.log("adding");
+            } else {
+                text.innerHTML = new_word;
+                recursive_delete(i, new_word);
+                console.log("deleting", i, new_word)
+            }
+        }, timeout)
+
+    }
+
+    console.log("memek");
+    recursive_add(Math.floor(Math.random() * words.length), "");
+</script>
+
+</html>
